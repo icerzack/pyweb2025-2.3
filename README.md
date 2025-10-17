@@ -31,6 +31,19 @@ curl -X PUT http://localhost:8000/api/v1/terms/FastAPI \
 curl -i -X DELETE http://localhost:8000/api/v1/terms/FastAPI
 ```
 
+## Документация API
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+- OpenAPI JSON: `http://localhost:8000/openapi.json`
+
+Сборка статической HTML-документации (через Docker):
+```bash
+curl -s http://localhost:8000/openapi.json > openapi.json
+docker run --rm -v $(pwd):/work -w /work redocly/cli:latest \
+  build-docs openapi.json -o docs.html
+```
+Файл `docs.html` можно открыть локально или отдавать как статический.
+
 ## Локальный запуск
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
