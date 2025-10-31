@@ -14,3 +14,17 @@ services:
       - "8000:8000"
     entrypoint: ["/bin/sh","-c","PYTHONPATH=/app alembic upgrade head || PYTHONPATH=/app alembic stamp head; exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1"]
 
+  grpc:
+    build: .
+    image: glossary-api:latest
+    environment:
+      - DATABASE_URL=sqlite:////data/app.db
+      - GRPC_HOST=0.0.0.0
+      - GRPC_PORT=50051
+      - PYTHONPATH=/app:/app/grpc_service/generated
+    volumes:
+      - ./data:/data
+    ports:
+      - "50051:50051"
+    entrypoint: ["/bin/sh","-c","PYTHONPATH=/app alembic upgrade head || PYTHONPATH=/app alembic stamp head; python grpc_service/compile_protos.py; exec python grpc_service/server.py"]
+

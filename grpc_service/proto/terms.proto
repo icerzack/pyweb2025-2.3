@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package glossary.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message Term {
+  int32 id = 1;
+  string keyword = 2;
+  string description = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message ListTermsResponse {
+  repeated Term terms = 1;
+}
+
+message GetTermRequest {
+  string keyword = 1;
+}
+
+message CreateTermRequest {
+  string keyword = 1;
+  string description = 2;
+}
+
+message UpdateTermRequest {
+  string keyword = 1;
+  string description = 2;
+}
+
+message DeleteTermRequest {
+  string keyword = 1;
+}
+
+message DeleteTermResponse {
+  bool deleted = 1;
+}
+
+service TermsService {
+  rpc ListTerms(google.protobuf.Empty) returns (ListTermsResponse);
+  rpc GetTerm(GetTermRequest) returns (Term);
+  rpc CreateTerm(CreateTermRequest) returns (Term);
+  rpc UpdateTerm(UpdateTermRequest) returns (Term);
+  rpc DeleteTerm(DeleteTermRequest) returns (DeleteTermResponse);
+}
+
+
